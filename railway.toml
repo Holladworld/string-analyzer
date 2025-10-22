@@ -1,0 +1,14 @@
+[build]
+builder = "NIXPACKS"
+
+[deploy]
+numReplicas = 1
+restartPolicyType = "ON_FAILURE"
+
+[[services]]
+name = "web"
+[[services.ports]]
+port = 8080
+
+[env]
+PORT = "8080"

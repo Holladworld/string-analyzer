@@ -6,10 +6,11 @@ import (
     "strings"
     "regexp"
     "reflect"
-    "string-analyzer/models"
-    "string-analyzer/services"
-    "string-analyzer/database"
+    "github.com/holladworld/string-analyzer/models"
+    "github.com/holladworld/string-analyzer/services"
+    "github.com/holladworld/string-analyzer/database"
     "github.com/gin-gonic/gin"
+v
 )
 
 func PostStringHandler(c *gin.Context) {

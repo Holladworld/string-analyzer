@@ -3,7 +3,7 @@ package database
 import (
     "database/sql"
     "fmt"
-    "string-analyzer/models"
+    "github.com/holladworld/string-analyzer/models"
     "encoding/json"
     _ "github.com/mattn/go-sqlite3"
 )

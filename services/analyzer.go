@@ -5,13 +5,13 @@ import (
     "encoding/hex"
     "strings"
     "time"
-    "string-analyzer/models"
+    "github.com/holladworld/string-analyzer/models"
 )
 
 func AnalyzeString(input string) models.AnalysisResult {
     result := models.AnalysisResult{
         Value: input,
-        CharacterFrequencyMap: make(map[string]int), // Changed to string
+        CharacterFrequencyMap: make(map[string]int),
         CreatedAt: time.Now().UTC().Format(time.RFC3339),
     }
     

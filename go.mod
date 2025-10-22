@@ -1,4 +1,4 @@
-module string-analyzer
+module github.com/holladworld/string-analyzer
 
 go 1.23.0
 
