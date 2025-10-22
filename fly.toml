@@ -1,0 +1,16 @@
+app = "string-analyzer-hng"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PORT = "8080"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  
+  [[http_service.checks]]
+    method = "get"
+    path = "/health"
+    timeout = 2000

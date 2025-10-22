@@ -10,7 +10,6 @@ import (
     "github.com/holladworld/string-analyzer/services"
     "github.com/holladworld/string-analyzer/database"
     "github.com/gin-gonic/gin"
-v
 )
 
 func PostStringHandler(c *gin.Context) {
@@ -19,38 +18,29 @@ func PostStringHandler(c *gin.Context) {
     }
     
     if err := c.ShouldBindJSON(&request); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{
-            "error": "Invalid request body or missing 'value' field",
-        })
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body or missing 'value' field"})
         return
     }
     
-    // Data type validation - must be string
     if reflect.TypeOf(request.Value).Kind() != reflect.String {
-        c.JSON(http.StatusUnprocessableEntity, gin.H{
-            "error": "Invalid data type for 'value' (must be string)",
-        })
+        c.JSON(http.StatusUnprocessableEntity, gin.H{"error": "Invalid data type for 'value' (must be string)"})
         return
     }
     
     stringValue := request.Value.(string)
     
-    // Check if string already exists
     exists, err := database.StringExists(stringValue)
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Database error"})
         return
     }
     if exists {
-        c.JSON(http.StatusConflict, gin.H{
-            "error": "String already exists in the system",
-        })
+        c.JSON(http.StatusConflict, gin.H{"error": "String already exists in the system"})
         return
     }
     
     result := services.AnalyzeString(stringValue)
     
-    // Store in database
     err = database.StoreString(result)
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to store string"})
@@ -81,9 +71,7 @@ func GetStringHandler(c *gin.Context) {
         return
     }
     if !exists {
-        c.JSON(http.StatusNotFound, gin.H{
-            "error": "String does not exist in the system",
-        })
+        c.JSON(http.StatusNotFound, gin.H{"error": "String does not exist in the system"})
         return
     }
     
@@ -113,44 +101,34 @@ func GetAllStringsHandler(c *gin.Context) {
     // Validate query parameters
     if isPalindromeStr != "" {
         if _, err := strconv.ParseBool(isPalindromeStr); err != nil {
-            c.JSON(http.StatusBadRequest, gin.H{
-                "error": "Invalid value for 'is_palindrome' (must be true or false)",
-            })
+            c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid value for 'is_palindrome' (must be true or false)"})
             return
         }
     }
     
     if minLengthStr != "" {
         if _, err := strconv.Atoi(minLengthStr); err != nil {
-            c.JSON(http.StatusBadRequest, gin.H{
-                "error": "Invalid value for 'min_length' (must be integer)",
-            })
+            c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid value for 'min_length' (must be integer)"})
             return
         }
     }
     
     if maxLengthStr != "" {
         if _, err := strconv.Atoi(maxLengthStr); err != nil {
-            c.JSON(http.StatusBadRequest, gin.H{
-                "error": "Invalid value for 'max_length' (must be integer)",
-            })
+            c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid value for 'max_length' (must be integer)"})
             return
         }
     }
     
     if wordCountStr != "" {
         if _, err := strconv.Atoi(wordCountStr); err != nil {
-            c.JSON(http.StatusBadRequest, gin.H{
-                "error": "Invalid value for 'word_count' (must be integer)",
-            })
+            c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid value for 'word_count' (must be integer)"})
             return
         }
     }
     
     if containsChar != "" && len(containsChar) != 1 {
-        c.JSON(http.StatusBadRequest, gin.H{
-            "error": "Invalid value for 'contains_character' (must be single character)",
-        })
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid value for 'contains_character' (must be single character)"})
         return
     }
     
@@ -194,9 +172,7 @@ func DeleteStringHandler(c *gin.Context) {
         return
     }
     if !deleted {
-        c.JSON(http.StatusNotFound, gin.H{
-            "error": "String does not exist in the system",
-        })
+        c.JSON(http.StatusNotFound, gin.H{"error": "String does not exist in the system"})
         return
     }
     
@@ -206,9 +182,7 @@ func DeleteStringHandler(c *gin.Context) {
 func NaturalLanguageFilterHandler(c *gin.Context) {
     query := c.Query("query")
     if query == "" {
-        c.JSON(http.StatusBadRequest, gin.H{
-            "error": "Query parameter 'query' is required",
-        })
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Query parameter 'query' is required"})
         return
     }
     
@@ -217,9 +191,7 @@ func NaturalLanguageFilterHandler(c *gin.Context) {
     
     // Check for conflicting filters
     if filters.MinLength != nil && filters.MaxLength != nil && *filters.MinLength > *filters.MaxLength {
-        c.JSON(http.StatusUnprocessableEntity, gin.H{
-            "error": "Conflicting filters: min_length cannot be greater than max_length",
-        })
+        c.JSON(http.StatusUnprocessableEntity, gin.H{"error": "Conflicting filters: min_length cannot be greater than max_length"})
         return
     }
     
@@ -253,7 +225,7 @@ func NaturalLanguageFilterHandler(c *gin.Context) {
     })
 }
 
-// Helper functions (keep these the same)
+// Helper functions
 func applyFilters(str models.AnalysisResult, isPalindromeStr, minLengthStr, maxLengthStr, wordCountStr, containsChar string) bool {
     // Palindrome filter
     if isPalindromeStr != "" {
